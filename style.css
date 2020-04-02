@@ -1,0 +1,144 @@
+body {
+  margin:0;
+}
+
+input {
+  border: none;
+  background-color: rgba(255,255,255, 0.5);
+  text-align: center;
+  color: black;
+  font-weight: bold;
+}
+
+#boardgame {
+  height:100vh;
+  width:100vh;
+  margin:auto;
+  display:flex;
+  flex-direction:row;
+
+  /*background-color: yellow;*/
+  /*position: relative;*/
+  /*background-image: url("welcome_to.jpg");
+  background-size: contain;
+  background-repeat: no-repeat;*/
+}
+
+#boardgame-img {
+  max-width:100%;
+  max-height:100%;
+}
+
+#widget-container {
+  position:relative;
+  display:inline-block;
+}
+
+#card-container {
+  display:flex;
+}
+
+#card-container > img {
+  display:flex;
+  flex-direction:row;
+  max-width:200px;
+}
+
+#cityname {
+  position:absolute;
+  float:left;
+  border-radius:3px;
+  width: 15%;
+  height: 5%;
+}
+
+#cityname > input {
+  width:100%;
+  height: 100%;
+  font-size: 12px;
+}
+
+.house {
+  /*background-color: blue;
+  opacity: 0.2;*/
+  border-radius:3px;
+  float:left;
+  position:absolute;
+  width:5%;
+  height:5%;
+}
+
+.house > input {
+  width:100%;
+  height: 100%;
+  font-size:20px;
+}
+
+/*** Remove arrows from number inputs ***/
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+/*** ***/
+
+.park {
+  background-color:darkgreen;
+  opacity: 0.1;
+  border-radius:10px;
+  float:left;
+  position:absolute;
+  width:3%;
+  height:3%;
+}
+
+.pool {
+  background-color: cornflowerblue;
+  opacity: 0.2;
+  border-radius:3px;
+  float:left;
+  position:absolute;
+  width:6%;
+  height:3%;
+}
+
+.fence {
+  background-color: brown;
+  opacity: 0.2;
+  border-radius:3px;
+  float:left;
+  position:absolute;
+  width:1%;
+  height:10%;
+}
+
+.work {
+  background-color: brown;
+  opacity: 0.2;
+  border-radius:3px;
+  float:left;
+  position:absolute;
+  width:2%;
+  height:2%;
+  transform: rotate(45deg);
+}
+
+.landprice {
+  background-color: blueviolet;
+  opacity: 0.2;
+  border-radius:3px;
+  float:left;
+  position:absolute;
+  width:2%;
+  height:2%;
+}
+
+.checked {
+  opacity: 0.8;
+}
