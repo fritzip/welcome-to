@@ -1,3 +1,10 @@
+:root {
+  --borderWidth: 7px;
+  --height: 24px;
+  --width: 12px;
+  --borderColor: #78b13f;
+}
+
 body {
   margin:0;
   padding: 0;
@@ -34,26 +41,9 @@ input {
   display: grid;
   height: 100%;
   position: relative;
-
-  /*height: 100vh;
-  position: relative;
-  display: inline-block;*/
 }
 
 #mega-widget-container {
-  /*position:relative;
-  display:inline-block;*/
-  /*display:flex;*/
-  /*background-image: url('assets/welcome_to.jpg');
-  background-position:center;
-	background-repeat:no-repeat;
-	background-size:contain;*/
-  /*width: 500px;
-  height: 500px;*/
-  /*position: absolute;
-  float: left;
-  left: 0;
-  top: 0;*/
   float: left;
   position: absolute;
   left: 0;
@@ -145,7 +135,7 @@ input {
 #cityname > input {
   width:100%;
   height: 100%;
-  font-size: 12px;
+  font-size: 2vmin;
 }
 
 .house {
@@ -161,7 +151,7 @@ input {
 .house > input {
   width:100%;
   height: 100%;
-  font-size:20px;
+  font-size:3vmin;
 }
 
 /*** Remove arrows from number inputs ***/
@@ -184,17 +174,11 @@ input[type=number] {
 }
 
 .park {
-  background-color:darkgreen;
-  opacity: 0.2;
-  border-radius:10px;
   width:3%;
   height:3%;
 }
 
 .pool {
-  background-color: cornflowerblue;
-  opacity: 0.3;
-  border-radius:3px;
   width:6%;
   height:3%;
 }
@@ -217,13 +201,26 @@ input[type=number] {
 }
 
 .landprice {
-  background-color: blueviolet;
+  /*background-color: blueviolet;
   opacity: 0.3;
-  border-radius:3px;
-  width:2%;
-  height:2%;
+  border-radius:3px;*/
+  transform: translate(-15%, -15%);
+  width:3%;
+  height:3%;
 }
 
 .checked {
   opacity: 0.8;
+}
+
+.check {
+  text-align: center;
+  color:#90df42;
+  text-shadow:0px 0px 8px rgb(0, 0, 0),0px 0px 2px rgb(0, 0, 0);/*,-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
+  font-size: 3vmin;
+  font-weight: bold;
+}
+
+.check:after {
+  content: '✔';
 }

@@ -18,40 +18,41 @@ function capmouse(e) {
 function showP(){
   console.log('X : '+posx/$("#boardgame").width()+' Y : '+posy/$("#boardgame").height());
 }
+var xscale = 100.427;
 var yscale = 100.427;
 function initHouses() {
   for (var i in houses) {
-    $("#widget-container").append(`<div id='house-${i}' class='house widget' style='left:${100*houses[i].x}%;top:${yscale*houses[i].y}%;'><input type="number" min="0" max="17"></div>`);
+    $("#widget-container").append(`<div id='house-${i}' class='house widget' style='left:${xscale*houses[i].x}%;top:${yscale*houses[i].y}%;'><input type="number" min="0" max="17"></div>`);
   }
 }
 
 function initParks() {
   for (var i in parks) {
-    $("#widget-container").append(`<div id='park-${i}' class='park widget' style='left:${100*parks[i].x}%;top:${yscale*parks[i].y}%;'></div>`);
+    $("#widget-container").append(`<div id='park-${i}' class='park widget' style='left:${xscale*parks[i].x}%;top:${yscale*parks[i].y}%;'></div>`);
   }
 }
 
 function initPools() {
   for (var i in pools) {
-    $("#widget-container").append(`<div id='pool-${i}' class='pool widget' style='left:${100*pools[i].x}%;top:${yscale*pools[i].y}%;'></div>`);
+    $("#widget-container").append(`<div id='pool-${i}' class='pool widget' style='left:${xscale*pools[i].x}%;top:${yscale*pools[i].y}%;'></div>`);
   }
 }
 
 function initFences() {
   for (var i in fences) {
-    $("#widget-container").append(`<div id='fence-${i}' class='fence widget' style='left:${100*fences[i].x}%;top:${yscale*fences[i].y}%;'></div>`);
+    $("#widget-container").append(`<div id='fence-${i}' class='fence widget' style='left:${xscale*fences[i].x}%;top:${yscale*fences[i].y}%;'></div>`);
   }
 }
 
 function initWorkSigns() {
   for (var i in worksigns) {
-    $("#widget-container").append(`<div id='work-${i}' class='work widget' style='left:${100*worksigns[i].x}%;top:${yscale*worksigns[i].y}%;'></div>`);
+    $("#widget-container").append(`<div id='work-${i}' class='work widget' style='left:${xscale*worksigns[i].x}%;top:${yscale*worksigns[i].y}%;'></div>`);
   }
 }
 
 function initLandPrices() {
   for (var i in landprices) {
-    $("#widget-container").append(`<div id='landprice-${i}' class='landprice widget' style='left:${100*landprices[i].x}%;top:${yscale*landprices[i].y}%;'></div>`);
+    $("#widget-container").append(`<div id='landprice-${i}' class='landprice widget' style='left:${xscale*landprices[i].x}%;top:${yscale*landprices[i].y}%;'></div>`);
   }
 }
 
@@ -133,18 +134,18 @@ $( document ).ready(function() {
     initWorkSigns();
     initLandPrices();
     generateDeck();
-    $("#widget-container").append(`<div id=cityname style='left:${100*cityname.x}%;top:${100*cityname.y}%;'><input type="text"></div>`);
+    $("#widget-container").append(`<div id=cityname style='left:${xscale*cityname.x}%;top:${yscale*cityname.y}%;'><input type="text"></div>`);
 
     $( ".house" ).click(function() {
       console.log($(this).attr('id'));
     });
     $(".park").click(function() {
       console.log($(this).attr('id'));
-      $(this).toggleClass("checked");
+      $(this).toggleClass("check");
     })
     $(".pool").click(function() {
       console.log($(this).attr('id'));
-      $(this).toggleClass("checked");
+      $(this).toggleClass("check");
     })
     $(".fence").click(function() {
       console.log($(this).attr('id'));
@@ -156,7 +157,7 @@ $( document ).ready(function() {
     })
     $(".landprice").click(function() {
       console.log($(this).attr('id'));
-      $(this).toggleClass("checked");
+      $(this).toggleClass("check");
     })
 
 });
