@@ -114,8 +114,7 @@ function generateDeck() {
       numbers.push(i);
     }
   }
-  console.log(numbers);
-
+  
   const actions = [];
   for(action of Object.keys(datas.actions)) {
     for(let j = 0; j < datas.actions[action]; j++) {

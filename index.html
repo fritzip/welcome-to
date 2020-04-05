@@ -17,16 +17,30 @@
 
 <body>
   <div id="boardgame" onmousemove="capmouse(event)" onclick="showP()">
-    <div id="widget-container">
-      <img src="assets/welcome_to.jpg" id="boardgame-img">
+    <div id="scoresheet">
+        <img src="assets/welcome_to.jpg" id="boardgame-img">
+        <div id="mega-widget-container">
+          <div id="widget-container"></div>
+        </div>
     </div>
-    <div id="card-container">
-      <img src="assets/pool.png">
-      <img src="assets/pool.png">
-      <img src="assets/pool.png">
-      <img src="assets/pool.png">
-      <img src="assets/pool.png">
-      <img src="assets/pool.png">
+    <div id="side-panel">
+      <!--div id="game-management">
+        <input type="number" min="0" max="80">
+      </div-->
+      <div id="card-container">
+        <div class="card-pair">
+          <div class="card"><img src="assets/pool.png"></div>
+          <div class="card"><img src="assets/num.png"></div>
+        </div>
+        <div class="card-pair">
+          <div class="card"><img src="assets/landprice.png"></div>
+          <div class="card"><img src="assets/num.png"></div>
+        </div>
+        <div class="card-pair">
+          <div class="card"><img src="assets/work.png"></div>
+          <div class="card"><img src="assets/num.png"></div>
+        </div>
+      </div>
     </div>
   </div>
 </body>
