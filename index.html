@@ -20,28 +20,33 @@
     <div id="scoresheet">
         <img src="assets/welcome_to.jpg" id="boardgame-img">
         <div id="mega-widget-container">
-          <div id="widget-container"></div>
+          <div id="widget-container">
+            <div class="management" id="round-management">
+              <button id="prev"><</button>
+                <input id="round" type="number" min="0" max="26" value="0">
+              <button id="next">></button>
+            </div>
+            <div class="management" id="seed-management">
+              <input id="seed" type="number" min="1" max="99999">
+            </div>
+          </div>
         </div>
     </div>
     <div id="side-panel">
-      <!--div id="game-management">
-        <input type="number" min="0" max="80">
-      </div-->
       <div id="card-container">
         <div class="card-pair">
-          <div class="card"><img src="assets/pool.png"></div>
+          <div class="card"><img id="action1" src="assets/pool.png"></div>
           <div class="card"><img src="assets/num.png"></div>
         </div>
         <div class="card-pair">
-          <div class="card"><img src="assets/landprice.png"></div>
+          <div class="card"><img id="action2" src="assets/landprice.png"></div>
           <div class="card"><img src="assets/num.png"></div>
         </div>
         <div class="card-pair">
-          <div class="card"><img src="assets/work.png"></div>
+          <div class="card"><img id="action3" src="assets/work.png"></div>
           <div class="card"><img src="assets/num.png"></div>
         </div>
       </div>
-    </div>
   </div>
 </body>
 </html>
