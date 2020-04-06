@@ -18,7 +18,7 @@ function capmouse(e) {
   }
 
 function showP(){
-  console.log('X : '+posx/$("#boardgame").width()+' Y : '+posy/$("#boardgame").height());
+  console.log('{ \'x\' : '+posx/$("#scoresheet").width()+', \'y\' : '+posy/$("#scoresheet").height()+' },');
 }
 var xscale = 100.427;
 var yscale = 100.427;
@@ -55,6 +55,12 @@ function initWorkSigns() {
 function initLandPrices() {
   for (var i in landprices) {
     $("#widget-container").append(`<div id='landprice-${i}' class='landprice widget' style='left:${xscale*landprices[i].x}%;top:${yscale*landprices[i].y}%;'></div>`);
+  }
+}
+
+function initBis() {
+  for (var i in bis) {
+    $("#widget-container").append(`<div id='bis-${i}' class='bis widget' style='left:${100*bis[i].x}%;top:${100*bis[i].y}%;'></div>`);
   }
 }
 
@@ -145,6 +151,7 @@ $( document ).ready(function() {
     initFences();
     initWorkSigns();
     initLandPrices();
+    initBis();
     $("#seed").val(Math.floor((Math.random() * $("#seed").attr("max")) + 1));
     generateDeck();
     $("#widget-container").append(`<div id=cityname style='left:${xscale*cityname.x}%;top:${yscale*cityname.y}%;'><input type="text"></div>`);
@@ -169,6 +176,10 @@ $( document ).ready(function() {
       $(this).toggleClass("checked");
     })
     $(".landprice").click(function() {
+      console.log($(this).attr('id'));
+      $(this).toggleClass("check");
+    })
+    $(".bis").click(function() {
       console.log($(this).attr('id'));
       $(this).toggleClass("check");
     })
