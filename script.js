@@ -86,6 +86,9 @@ function renderCards() {
   $("#action1").attr("src","assets/"+actions[i*3]+".png");
   $("#action2").attr("src","assets/"+actions[i*3 + 1]+".png");
   $("#action3").attr("src","assets/"+actions[i*3 + 2]+".png");
+  $("#number1").text(numbers[i*3]);
+  $("#number2").text(numbers[i*3 + 1]);
+  $("#number3").text(numbers[i*3 + 2]);
 }
 
 function generateDeck() {

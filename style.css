@@ -9,6 +9,8 @@ body {
   margin:0;
   padding: 0;
   overflow-x: hidden;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-weight: bold;
 }
 
 input {
@@ -139,6 +141,7 @@ input {
 .card {
   flex-grow: 1;
   flex-basis: 0;
+  position: relative;
   /*max-height: 30vh;*/
 }
 
@@ -147,6 +150,18 @@ input {
   max-width: 100%;
   object-fit: scale-down;
   /*max-height:33.33vh;*/
+}
+
+.number {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 5px;
+  padding: 5px 10px;
+  position: absolute;
+  float:left;
+  left:50%;
+  top:50%;
+  transform: translate(-50%,-50%);
+  font-size:4vmin;
 }
 
 #cityname {
