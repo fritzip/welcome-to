@@ -38,6 +38,9 @@ function initPools() {
   for (var i in pools) {
     $("#widget-container").append(`<div id='pool-${i}' class='pool widget' style='left:${xscale*pools[i].x}%;top:${yscale*pools[i].y}%;'></div>`);
   }
+  for (var i in pools_checks) {
+    $("#widget-container").append(`<div id='pool-check-${i}' class='pool-check widget' style='left:${xscale*pools_checks[i].x}%;top:${yscale*pools_checks[i].y}%;'></div>`);
+  }
 }
 
 function initFences() {
@@ -61,6 +64,12 @@ function initLandPrices() {
 function initBis() {
   for (var i in bis) {
     $("#widget-container").append(`<div id='bis-${i}' class='bis widget' style='left:${100*bis[i].x}%;top:${100*bis[i].y}%;'></div>`);
+  }
+}
+
+function initScores() {
+  for (var i in total_scores) {
+    $("#widget-container").append(`<div id='${total_scores[i].id}' class='total-score widget' style='left:${xscale*total_scores[i].x}%;top:${yscale*total_scores[i].y}%;'><span></span></div>`);
   }
 }
 
@@ -152,37 +161,57 @@ $( document ).ready(function() {
     initWorkSigns();
     initLandPrices();
     initBis();
+    initScores();
+
     $("#seed").val(Math.floor((Math.random() * $("#seed").attr("max")) + 1));
     generateDeck();
+
     $("#widget-container").append(`<div id=cityname style='left:${xscale*cityname.x}%;top:${yscale*cityname.y}%;'><input type="text"></div>`);
 
     $( ".house" ).click(function() {
       console.log($(this).attr('id'));
     });
+
     $(".park").click(function() {
       console.log($(this).attr('id'));
       $(this).toggleClass("check");
-    })
+    });
+
     $(".pool").click(function() {
       console.log($(this).attr('id'));
-      $(this).toggleClass("check");
-    })
+      var result = $(this).toggleClass("check");
+      if (result.hasClass('check')) {
+        $(".pool-check:not(.check):first").toggleClass("check");
+      } else {
+        $(".pool-check.check:last").toggleClass("check");
+      }
+      $("#pool-score>span").text(pool_scores[$(".pool-check.check").length]);
+    });
+
     $(".fence").click(function() {
       console.log($(this).attr('id'));
       $(this).toggleClass("checked");
-    })
+    });
+
     $(".work").click(function() {
       console.log($(this).attr('id'));
       $(this).toggleClass("checked");
-    })
+    });
+
     $(".landprice").click(function() {
       console.log($(this).attr('id'));
       $(this).toggleClass("check");
-    })
+    });
+
     $(".bis").click(function() {
       console.log($(this).attr('id'));
       $(this).toggleClass("check");
-    })
+    });
+
+    $(".total-score").each(function() {
+      $("span", this).text(0);
+    });
+
     $("#next").click(function() {
       $('#round').val( function(i, oldval) {
         var i = ++oldval;
@@ -192,6 +221,7 @@ $( document ).ready(function() {
       });
       renderCards();
     });
+
     $("#prev").click(function() {
       $('#round').val( function(i, oldval) {
         var i = --oldval;
@@ -200,6 +230,7 @@ $( document ).ready(function() {
       });
       renderCards();
     });
+
     $("#round").blur(function(){
       var i = $(this).val();
       var maxval = $(this).attr("max");
@@ -219,5 +250,4 @@ $( document ).ready(function() {
       $(this).val(i);
       generateDeck();
     });
-
 });

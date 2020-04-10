@@ -223,6 +223,15 @@ input[type=number] {
   height:3%;
 }
 
+.pool-check {
+  width:3%;
+  height:3%;
+}
+
+.pool-check.check {
+  background-color: rgb(146,195,189);
+}
+
 .fence {
   background-color: brown;
   opacity: 0.3;
@@ -241,8 +250,6 @@ input[type=number] {
 }
 
 .landprice {
-  /*opacity: 0.3;
-  border-radius:3px;*/
   transform: translate(-15%, -15%);
   width:3%;
   height:3%;
@@ -253,7 +260,6 @@ input[type=number] {
 }
 
 .bis {
-  /*background-color: brown;*/
   width:3%;
   height: 3%;
 }
@@ -276,4 +282,19 @@ input[type=number] {
 
 .check:after {
   content: '✔';
+}
+
+.total-score {
+  width: 4%;
+  height: 4%;
+  transform: translate(-50%, -50%);
+  /*background-color: rgba(0, 38, 255, 0.5);*/
+  font-size:3vmin;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+span {
+  text-align: center;
 }
