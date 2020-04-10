@@ -30,7 +30,10 @@ function initHouses() {
 
 function initParks() {
   for (var i in parks) {
-    $("#widget-container").append(`<div id='park-${i}' class='park widget' style='left:${xscale*parks[i].x}%;top:${yscale*parks[i].y}%;'></div>`);
+    $("#widget-container").append(`<div id='park-${i}' class='park widget' style='left:${xscale*parks[i].x}%;top:${yscale*parks[i].y}%;' data-row='${parks[i].row}' data-score='${parks[i].score}'></div>`);
+  }
+  for (var i in park_scores) {
+    $("#widget-container").append(`<div id='park-score-${i}' class='total-score park-score widget' style='left:${xscale*park_scores[i].x}%;top:${yscale*park_scores[i].y}%;'><span></span></div>`);
   }
 }
 
@@ -173,12 +176,32 @@ $( document ).ready(function() {
     });
 
     $(".park").click(function() {
-      console.log($(this).attr('id'));
-      $(this).toggleClass("check");
+      var row = $(this).data("row");
+      var first_unchecked = $(".park[data-row='" + row +"']:not(.check):first");
+      var last_checked = $(".park[data-row='" + row +"'].check:last");
+        
+      if (($(this).hasClass('check') && $(last_checked).data('score') === $(this).data('score')) || (!$(this).hasClass('check') && $(first_unchecked).data('score') == $(this).data('score'))) {
+        var result = $(this).toggleClass("check");
+        if (result.hasClass("check")) {
+          $("#park-score-"+row+">span").text($(this).data('score'));
+        } else {
+          if ($(this).data('score')==2) {
+            $("#park-score-"+row+">span").text(0);
+          } else {
+            $("#park-score-"+row+">span").text($(".park[data-row='" + row +"'].check:last").data('score'));
+          }
+        }
+      } else {
+        return false;
+      }
+      var sum = 0;
+      $('.park-score>span').each(function() {
+          sum += Number($(this).text());
+      });
+      $('#park-score>span').text(sum);
     });
 
     $(".pool").click(function() {
-      console.log($(this).attr('id'));
       var result = $(this).toggleClass("check");
       if (result.hasClass('check')) {
         $(".pool-check:not(.check):first").toggleClass("check");
@@ -205,10 +228,23 @@ $( document ).ready(function() {
 
     $(".bis").click(function() {
       console.log($(this).attr('id'));
-      $(this).toggleClass("check");
+
+      var first_unchecked = $(".bis:not(.check):first");
+      var last_checked = $(".bis.check:last");
+        
+      if (($(this).hasClass('check') && $(last_checked).attr('id') === $(this).attr('id')) || (!$(this).hasClass('check') && $(first_unchecked).attr('id') == $(this).attr('id'))) {
+        $(this).toggleClass("check");
+        $("#bis-score>span").text(bis_scores[$(".bis.check").length]);
+      } else {
+        return false;
+      }
     });
 
     $(".total-score").each(function() {
+      $("span", this).text(0);
+    });
+
+    $(".park-score").each(function() {
       $("span", this).text(0);
     });
 
