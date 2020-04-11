@@ -216,11 +216,27 @@ input[type=number] {
 .park {
   width:3%;
   height:3%;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: rgb(58, 187, 75);
+  opacity: 0.1;
+}
+.park:hover {
+  opacity: 0.3;
+}
+.park.check {
+  opacity: 1.0;
+  background-color: unset;
 }
 
 .pool {
   width:6%;
   height:3%;
+  cursor: pointer;
+}
+
+.pool:hover {
+  background-color: rgba(146,195,189,0.4);
 }
 
 .pool-check {
@@ -238,6 +254,15 @@ input[type=number] {
   border-radius:3px;
   width:1%;
   height:10%;
+  cursor: pointer;
+}
+
+.fence:hover {
+  opacity:0.5;
+}
+
+.fence.checked {
+  opacity: 0.7;
 }
 
 .work {
@@ -247,29 +272,57 @@ input[type=number] {
   width:2%;
   height:2%;
   transform: rotate(45deg);
+  cursor: pointer;
+}
+
+.work:hover {
+  opacity: 0.5;
+}
+
+.work.checked {
+  opacity: 0.8;
+}
+
+.work-score {
+  width:3%;
+  height:3%;
+}
+
+.work-score.check {
+  background-color: rgb(146,195,189);
 }
 
 .landprice {
   transform: translate(-15%, -15%);
   width:3%;
   height:3%;
+  cursor: pointer;
 }
 
 .landprice.check {
   background-color: rgb(146,195,189);
 }
 
+.landcounter {
+  background-color: #f00;
+}
+
+.landcounter > input {
+  font-size: 2vmin;
+  margin: 0;
+  padding: 0;
+  min-width: 0px;
+  max-width: 1.5ch;
+}
+
 .bis {
   width:3%;
   height: 3%;
+  cursor: pointer;
 }
 
 .bis.check {
   background-color: rgb(208,95,63);
-}
-
-.checked {
-  opacity: 0.8;
 }
 
 .check {

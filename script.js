@@ -7,21 +7,24 @@ function capmouse(e) {
   // captures the mouse position
   posx = 0; posy = 0;
   if (!e){var e = window.event;}
-    if (e.pageX || e.pageY){
-      posx = e.pageX;
-      posy = e.pageY;
-    }
-    else if (e.clientX || e.clientY){
-      posx = e.clientX;
-      posy = e.clientY;
-    }
+
+  if (e.pageX || e.pageY){
+    posx = e.pageX;
+    posy = e.pageY;
   }
+  else if (e.clientX || e.clientY){
+    posx = e.clientX;
+    posy = e.clientY;
+  }
+}
 
 function showP(){
   console.log('{ \'x\' : '+posx/$("#scoresheet").width()+', \'y\' : '+posy/$("#scoresheet").height()+' },');
 }
+
 var xscale = 100.427;
 var yscale = 100.427;
+
 function initHouses() {
   for (var i in houses) {
     $("#widget-container").append(`<div id='house-${i}' class='house widget' style='left:${xscale*houses[i].x}%;top:${yscale*houses[i].y}%;'><input type="number" min="0" max="17"></div>`);
@@ -56,12 +59,29 @@ function initWorkSigns() {
   for (var i in worksigns) {
     $("#widget-container").append(`<div id='work-${i}' class='work widget' style='left:${xscale*worksigns[i].x}%;top:${yscale*worksigns[i].y}%;'></div>`);
   }
+  for (var i in worksigns_radio) {
+    $("#widget-container").append(`<div id='work-score-${i}' class='work-score widget' data-score='${worksigns_radio[i].score}' style='left:${xscale*worksigns_radio[i].x}%;top:${yscale*worksigns_radio[i].y}%;'><span></span></div>`);
+  }
 }
 
 function initLandPrices() {
   for (var i in landprices) {
-    $("#widget-container").append(`<div id='landprice-${i}' class='landprice widget' style='left:${xscale*landprices[i].x}%;top:${yscale*landprices[i].y}%;'></div>`);
+    $("#widget-container").append(`<div id='landprice-${i}' class='landprice widget' data-col='${landprices[i].col}' data-score='${landprices[i].score}' style='left:${xscale*landprices[i].x}%;top:${yscale*landprices[i].y}%;'></div>`);
   }
+  for (var i in landcounters) {
+    $("#widget-container").append(`<div id='landcounter-${i}' class='landcounter widget' style='left:${xscale*landcounters[i].x}%;top:${yscale*landcounters[i].y}%;'><input type="number" min="0" max="9" value="0"></div>`);
+  }
+}
+
+function updateLandScores() {
+  for(var col in landcounters) {
+    var last_checked = $(".landprice[data-col='" + col +"'].check:last");
+    if($(last_checked).length==0) {
+      $("#landprice-score-"+col+">span").text(landprices_score[col]*$("#landcounter-" + col + ">input").val());
+    } else {
+      $("#landprice-score-"+col+">span").text($(last_checked).data('score')*$("#landcounter-" + col + ">input").val());
+    }
+  }     
 }
 
 function initBis() {
@@ -221,9 +241,39 @@ $( document ).ready(function() {
       $(this).toggleClass("checked");
     });
 
+    $(".work-score").click(function() {
+      var result = $(this).toggleClass("check");
+      if (result.hasClass("check")) {
+        $('.work-score').not(this).each(function(){
+          $(this).removeClass("check");
+        });
+        $("#work-score>span").text($(this).data('score'));
+      } else {
+        $("#work-score>span").text(0);
+      }
+    });
+
     $(".landprice").click(function() {
-      console.log($(this).attr('id'));
-      $(this).toggleClass("check");
+      //console.log($(this).attr('id'));
+      //$(this).toggleClass("check");
+      var col = $(this).data("col");
+      var first_unchecked = $(".landprice[data-col='" + col +"']:not(.check):first");
+      var last_checked = $(".landprice[data-col='" + col +"'].check:last");
+        
+      if (($(this).hasClass('check') && $(last_checked).data('score') === $(this).data('score')) || (!$(this).hasClass('check') && $(first_unchecked).data('score') == $(this).data('score'))) {
+        $(this).toggleClass("check");
+        updateLandScores();
+      } else {
+        return false;
+      }
+    });
+    
+    $(".landcounter>input").change(function(){
+      updateLandScores();
+    });
+
+    $(".total-score").change(function() {
+      console.log("chanaaaage");
     });
 
     $(".bis").click(function() {
