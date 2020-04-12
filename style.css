@@ -2,7 +2,8 @@
   --borderWidth: 7px;
   --height: 24px;
   --width: 12px;
-  --borderColor: #78b13f;
+  --wRed : #D35C3C;
+  --wGreen : #85B069;
 }
 
 body {
@@ -213,10 +214,29 @@ input[type=number] {
   position:absolute;
 }
 
+.bonus {
+  width:4%;
+  height:4%;
+  /*border-radius: 10px;*/
+  /*cursor: pointer;
+  background-color: rgb(58, 187, 75);*/
+}
+
+.bonus > input {
+  margin: 0;
+  padding: 0;
+  font-size:2.5vmin;
+  min-width: 0px;
+  max-width: 2.5ch;
+  background-color: rgba(255,255,255, 0.0);
+  transform: translate(-50%, -50%);
+}
+
 .park {
   width:3%;
   height:3%;
-  border-radius: 10px;
+}
+/*  border-radius: 10px;
   cursor: pointer;
   background-color: rgb(58, 187, 75);
   opacity: 0.1;
@@ -227,7 +247,7 @@ input[type=number] {
 .park.check {
   opacity: 1.0;
   background-color: unset;
-}
+}*/
 
 .pool {
   width:6%;
@@ -288,6 +308,10 @@ input[type=number] {
   height:3%;
 }
 
+.checkable:hover {
+  cursor: pointer;
+}
+
 .work-score.check {
   background-color: rgb(146,195,189);
 }
@@ -296,7 +320,6 @@ input[type=number] {
   transform: translate(-15%, -15%);
   width:3%;
   height:3%;
-  cursor: pointer;
 }
 
 .landprice.check {
@@ -304,7 +327,7 @@ input[type=number] {
 }
 
 .landcounter {
-  background-color: #f00;
+  /*background-color: #f00;*/
 }
 
 .landcounter > input {
@@ -318,22 +341,42 @@ input[type=number] {
 .bis {
   width:3%;
   height: 3%;
-  cursor: pointer;
 }
 
 .bis.check {
   background-color: rgb(208,95,63);
 }
 
-.check {
+.cantplay {
+  width:4%;
+  height: 4%;
+  /*background-color: rgb(49, 0, 224);
+  opacity: 0.4;*/
+  transform: translate(-50%, -50%);
+}
+
+.cantplay.check {
+  background-color: rgb(208,95,63);
+}
+
+.check, .checkable:hover {
   text-align: center;
-  color:#90df42;
+  color:#8bee28;
   text-shadow:0px 0px 8px rgb(0, 0, 0),0px 0px 2px rgb(0, 0, 0);/*,-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
   font-size: 2.5vmin ;
   font-weight: bold;
 }
 
-.check:after {
+.check.checkable {
+  border: none
+}
+
+.check.checkable:hover::before {
+  color:var(--wRed);
+  content: '✗';
+}
+
+.check:before, .checkable:hover::before {
   content: '✔';
 }
 
@@ -346,6 +389,8 @@ input[type=number] {
   display: flex;
   justify-content: center;
   flex-direction: column;
+  color: darkslategrey;
+  cursor: default;
 }
 
 span {
