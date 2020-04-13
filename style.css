@@ -2,8 +2,9 @@
   --borderWidth: 7px;
   --height: 24px;
   --width: 12px;
-  --wRed : #D35C3C;
-  --wGreen : #85B069;
+  --wRed : 211, 92, 60;
+  --wGreen : 133, 176, 105;
+  --wBlue : 146,195,189;
 }
 
 body {
@@ -107,7 +108,7 @@ input {
 }
 
 button {
-  background-color: rgba(146,195,189,0.9);
+  background-color: rgba(var(--wBlue),0.9);
   border-radius: 4px;
   flex-grow: 2;
 }
@@ -272,7 +273,7 @@ input[type=number] {
 }
 
 .pool:hover {
-  background-color: rgba(146,195,189,0.4);
+  background-color: rgba(var(--wBlue),0.4);
 }
 
 .pool-check {
@@ -281,7 +282,7 @@ input[type=number] {
 }
 
 .pool-check.check {
-  background-color: rgb(146,195,189);
+  background-color: rgb(var(--wBlue));
 }
 
 .fence {
@@ -329,7 +330,7 @@ input[type=number] {
 }
 
 .work-score.check {
-  background-color: rgb(146,195,189);
+  background-color: rgb(var(--wBlue));
 }
 
 .landprice {
@@ -339,19 +340,17 @@ input[type=number] {
 }
 
 .landprice.check {
-  background-color: rgb(146,195,189);
+  background-color: rgb(var(--wBlue));
 }
 
-.landcounter {
-  /*background-color: #f00;*/
-}
-
-.landcounter > input {
+.landcounter > span {
   font-size: 2vmin;
   margin: 0;
-  padding: 0;
-  min-width: 0px;
-  max-width: 1.5ch;
+  padding: 2px 1px;
+  background-color: rgba(var(--wBlue),0.5);
+  color: darkslategrey;
+  cursor: default;
+  /*max-width: 1.5ch;*/
 }
 
 .bis {
@@ -388,7 +387,7 @@ input[type=number] {
 }
 
 .check.checkable:hover::before {
-  color:var(--wRed);
+  color:rgb(var(--wRed));
   content: '✗';
 }
 
@@ -409,6 +408,8 @@ input[type=number] {
   cursor: default;
 }
 
+
 span {
   text-align: center;
+  user-select: none;
 }

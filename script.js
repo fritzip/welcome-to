@@ -1,4 +1,3 @@
-
 var posx;var posy;
 var actions = [];
 var numbers = [];
@@ -26,8 +25,10 @@ var xscale = 100.427;
 var yscale = 100.427;
 
 function initHouses() {
-  for (var i in houses) {
-    $("#widget-container").append(`<div id='house-${i}' class='house widget' style='left:${xscale*houses[i].x}%;top:${yscale*houses[i].y}%;'><input type="number" min="0" max="17"></div>`);
+  for (var row in houses) {
+    for (var i in houses[row]) {
+      $("#widget-container").append(`<div id='house-${row}-${i}' class='house widget' data-row='${row}' style='left:${xscale*houses[row][i].x}%;top:${yscale*houses[row][i].y}%;'><input type="number" min="0" max="17"></div>`);
+    }
   }
 }
 
@@ -74,8 +75,10 @@ function initPools() {
 }
 
 function initFences() {
-  for (var i in fences) {
-    $("#widget-container").append(`<div id='fence-${i}' class='fence widget' style='left:${xscale*fences[i].x}%;top:${yscale*fences[i].y}%;'></div>`);
+  for (var row in fences) {
+    for (var i in fences[row]) {
+      $("#widget-container").append(`<div id='fence-${row}-${i}' class='fence widget' data-row='${row}' style='left:${xscale*fences[row][i].x}%;top:${yscale*fences[row][i].y}%;'></div>`);
+    }
   }
 }
 
@@ -100,7 +103,7 @@ function initLandPrices() {
     extraClass = "";
   }
   for (var i in landcounters) {
-    $("#widget-container").append(`<div id='landcounter-${i}' class='landcounter widget' style='left:${xscale*landcounters[i].x}%;top:${yscale*landcounters[i].y}%;'><input type="number" min="0" max="9" value="0"></div>`);
+    $("#widget-container").append(`<div id='landcounter-${i}' class='landcounter widget' style='left:${xscale*landcounters[i].x}%;top:${yscale*landcounters[i].y}%;'><span></span></div>`);
   }
 }
 
@@ -108,11 +111,11 @@ function updateLandScores() {
   for(var col in landcounters) {
     var last_checked = $(".landprice[data-col='" + col +"'].check:last");
     if($(last_checked).length==0) {
-      $("#landprice-score-"+col+">span").text(landprices_score[col]*$("#landcounter-" + col + ">input").val());
+      $("#landprice-score-"+col+">span").text(landprices_score[col]*Number($("#landcounter-" + col + ">span").text()));
     } else {
-      $("#landprice-score-"+col+">span").text($(last_checked).data('score')*$("#landcounter-" + col + ">input").val());
+      $("#landprice-score-"+col+">span").text($(last_checked).data('score')*Number($("#landcounter-" + col + ">span").text()));
     }
-  }     
+  }    
 }
 
 function initBis() {
@@ -141,6 +144,38 @@ function initScores() {
   for (var i in total_scores) {
     $("#widget-container").append(`<div id='${total_scores[i].id}' class='total-score widget' style='left:${xscale*total_scores[i].x}%;top:${yscale*total_scores[i].y}%;'><span></span></div>`);
   }
+}
+
+function updateLandCounter() {
+  $(".landcounter>span").each(function() {
+    $(this).text(0);
+  });
+
+  var inHousingEstate;
+  var housingEstateSize;
+  for (var row=0; row < 3; ++row ) {
+    inHousingEstate = true;
+    housingEstateSize = 0;
+    var housesDOM = $(".house[data-row='" + row +"']>input").get();
+    var fencesDOM = $(".fence[data-row='" + row +"']").get();
+    for (var i=0; i<housesDOM.length; ++i) {
+      if($(housesDOM[i]).val()) {
+        housingEstateSize++;
+      } else {
+        inHousingEstate = false;
+      }
+      if($(fencesDOM[i]).hasClass("checked") || (typeof fencesDOM[i] == 'undefined')) {
+        if (inHousingEstate && housingEstateSize < 7) {
+          housingEstateSize--;
+          $("#landcounter-"+housingEstateSize+">span").text(parseInt($("#landcounter-"+housingEstateSize+">span").text()) + 1);
+        }
+        housingEstateSize = 0;
+        inHousingEstate = true;
+      }
+    }
+  }
+  updateLandScores();
+  updateTotalScore();
 }
 
 function updateTotalScore() {
@@ -194,34 +229,6 @@ function renderCards() {
 }
 
 function generateDeck() {
-  var datas = {
-    numbers:{
-      1:3,
-      2:3,
-      3:4,
-      4:5,
-      5:6,
-      6:7,
-      7:8,
-      8:9,
-      9:8,
-      10:7,
-      11:6,
-      12:5,
-      13:4,
-      14:3,
-      15:3
-    },
-    actions:{
-      'park':18,
-      'pool':9,
-      'work':9,
-      'bis':9,
-      'landprice':18,
-      'fence':18
-    }
-  };
-  
   numbers = [];
   for(i of Object.keys(datas.numbers)) {
     for(let j = 0; j < datas.numbers[i]; j++) {
@@ -237,7 +244,7 @@ function generateDeck() {
   }
   shuffle(numbers, $("#seed").val());
   shuffle(actions, $("#seed").val());
-  console.log(numbers);
+
   numbers_next_seed = [];
   for(i of Object.keys(datas.numbers)) {
     for(let j = 0; j < datas.numbers[i]; j++) {
@@ -253,7 +260,6 @@ function generateDeck() {
   }
   shuffle(numbers_next_seed, Number($("#seed").val())+1);
   shuffle(actions_next_seed, Number($("#seed").val())+1);
-  console.log(numbers_next_seed);
   numbers.push(...numbers_next_seed);
   actions.push(...actions_next_seed);
   renderCards();
@@ -276,8 +282,9 @@ $( document ).ready(function() {
 
     $("#widget-container").append(`<div id=cityname style='left:${xscale*cityname.x}%;top:${yscale*cityname.y}%;'><input type="text"></div>`);
 
-    $( ".house" ).click(function() {
-      console.log($(this).attr('id'));
+    $( ".house>input" ).on('input',function() {
+      console.log($(this).parent().attr('id'));
+      updateLandCounter();
     });
 
     $(".bonus>input").on('input',function(){
@@ -328,6 +335,7 @@ $( document ).ready(function() {
     $(".fence").click(function() {
       console.log($(this).attr('id'));
       $(this).toggleClass("checked");
+      updateLandCounter();
     });
 
     $(".work").click(function() {
@@ -369,7 +377,7 @@ $( document ).ready(function() {
       updateTotalScore();
     });
     
-    $(".landcounter>input").change(function(){
+    $(".landcounter>span").change(function(){
       updateLandScores();
       updateTotalScore();
     });
@@ -417,13 +425,8 @@ $( document ).ready(function() {
       $("span", this).text(0);
     });
 
-    $(".bonus-score").each(function() {
-      $("span", this).text(0);
-    });
 
-    $(".park-score").each(function() {
-      $("span", this).text(0);
-    });
+    updateLandCounter();
 
     $("#next").click(function() {
       $('#round').val( function(i, oldval) {
