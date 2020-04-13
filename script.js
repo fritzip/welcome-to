@@ -237,6 +237,25 @@ function generateDeck() {
   }
   shuffle(numbers, $("#seed").val());
   shuffle(actions, $("#seed").val());
+  console.log(numbers);
+  numbers_next_seed = [];
+  for(i of Object.keys(datas.numbers)) {
+    for(let j = 0; j < datas.numbers[i]; j++) {
+      numbers_next_seed.push(i);
+    }
+  }
+  
+  actions_next_seed = [];
+  for(action of Object.keys(datas.actions)) {
+    for(let j = 0; j < datas.actions[action]; j++) {
+      actions_next_seed.push(action);
+    }
+  }
+  shuffle(numbers_next_seed, Number($("#seed").val())+1);
+  shuffle(actions_next_seed, Number($("#seed").val())+1);
+  console.log(numbers_next_seed);
+  numbers.push(...numbers_next_seed);
+  actions.push(...actions_next_seed);
   renderCards();
 }
 
@@ -419,27 +438,27 @@ $( document ).ready(function() {
     $("#prev").click(function() {
       $('#round').val( function(i, oldval) {
         var i = --oldval;
-        if (i < 0) i = 0;
+        if (i < 1) i = 1;
         return i;
       });
       renderCards();
     });
 
     $("#round").blur(function(){
-      var i = $(this).val();
-      var maxval = $(this).attr("max");
+      var i = Number($(this).val());
+      var maxval = Number($(this).attr("max"));
       if (i > maxval) i =  maxval;
-      var minval = $(this).attr("min");
+      var minval = Number($(this).attr("min"));
       if (i < minval) i = minval;
       $(this).val(i);
       renderCards();
     });
 
     $("#seed").blur(function(){
-      var i = $(this).val();
-      var maxval = $(this).attr("max");
+      var i = Number($(this).val());
+      var maxval = Number($(this).attr("max"));
       if (i > maxval) i =  maxval;
-      var minval = $(this).attr("min");
+      var minval = Number($(this).attr("min"));
       if (i < minval) i = minval;
       $(this).val(i);
       generateDeck();
