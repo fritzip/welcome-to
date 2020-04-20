@@ -1,6 +1,7 @@
 var posx;var posy;
 var actions = [];
 var numbers = [];
+var img=new Image();
 
 function capmouse(e) {
   // captures the mouse position
@@ -21,8 +22,8 @@ function showP(){
   console.log('{ \'x\' : '+posx/$("#scoresheet").width()+', \'y\' : '+posy/$("#scoresheet").height()+' },');
 }
 
-var xscale = 100.427;
-var yscale = 100.427;
+var xscale = 100.2;
+var yscale = 100;
 
 function initHouses() {
   for (var row in houses) {
@@ -33,14 +34,14 @@ function initHouses() {
 }
 
 function initBonus() {
-  for (var i in bonus) {
-    $("#widget-container").append(`<div id='bonus-${i}' class='bonus widget' style='left:${xscale*bonus[i].x}%;top:${yscale*bonus[i].y}%;'><input type="number" min="0" max="9" value="0"></div>`);
+  for (var i in bonus_scores) {
+    $("#widget-container").append(`<div id='bonus-${i}' class='total-score bonus-score widget' style='left:${xscale*bonus_scores[i].x}%;top:${yscale*bonus_scores[i].y}%;'><span></span></div>`);
   }
 };
 
 function initParks() {
   var extraClass = "";
-  var row = 99;
+  var row = -1;
   for (var i in parks) {
     if(row != parks[i].row) {
       row = parks[i].row;
@@ -84,7 +85,7 @@ function initFences() {
 
 function initWorkSigns() {
   for (var i in worksigns) {
-    $("#widget-container").append(`<div id='work-${i}' class='work widget' style='left:${xscale*worksigns[i].x}%;top:${yscale*worksigns[i].y}%;'></div>`);
+    $("#widget-container").append(`<div id='work-${i}' class='work widget checkable' style='left:${xscale*worksigns[i].x}%;top:${yscale*worksigns[i].y}%;'></div>`);
   }
   for (var i in worksigns_radio) {
     $("#widget-container").append(`<div id='work-score-${i}' class='work-score widget checkable' data-score='${worksigns_radio[i].score}' style='left:${xscale*worksigns_radio[i].x}%;top:${yscale*worksigns_radio[i].y}%;'><span></span></div>`);
@@ -124,7 +125,7 @@ function initBis() {
     if (i==0) {
       extraClass = "checkable";
     }
-    $("#widget-container").append(`<div id='bis-${i}' class='bis widget ${extraClass}' style='left:${100*bis[i].x}%;top:${100*bis[i].y}%;'></div>`);
+    $("#widget-container").append(`<div id='bis-${i}' class='bis widget ${extraClass}' style='left:${xscale*bis[i].x}%;top:${yscale*bis[i].y}%;'></div>`);
     extraClass = "";
   }
 }
@@ -218,6 +219,12 @@ function random(seed) {
   return x - Math.floor(x);
 }
 
+function preloadImage(url)
+{
+    var img=new Image();
+    img.src=url;
+}
+
 function renderCards() {
   var i = $("#round").val();
   $("#action1").attr("src","assets/"+actions[i*3]+".png");
@@ -226,9 +233,19 @@ function renderCards() {
   $("#number1").text(numbers[i*3]);
   $("#number2").text(numbers[i*3 + 1]);
   $("#number3").text(numbers[i*3 + 2]);
+  $("#number1").nextAll(':lt(2)').attr("src","assets/"+actions[i*3 + 3]+"-ico.png");
+  $("#number2").nextAll(':lt(2)').attr("src","assets/"+actions[i*3 + 4]+"-ico.png");
+  $("#number3").nextAll(':lt(2)').attr("src","assets/"+actions[i*3 + 5]+"-ico.png");
+}
+
+function renderBonus() {
+  $(".bonus-card").each(function() {
+    $(this).attr("src","assets/bonus/bonus"+$(this).data("row")+"r"+$(this).data("number")+".jpg");
+  });
 }
 
 function generateDeck() {
+  var seed = Number($("#seed").val());
   numbers = [];
   for(i of Object.keys(datas.numbers)) {
     for(let j = 0; j < datas.numbers[i]; j++) {
@@ -242,8 +259,8 @@ function generateDeck() {
       actions.push(action);
     }
   }
-  shuffle(numbers, $("#seed").val());
-  shuffle(actions, $("#seed").val());
+  shuffle(numbers, seed);
+  shuffle(actions, seed*3);
 
   numbers_next_seed = [];
   for(i of Object.keys(datas.numbers)) {
@@ -254,16 +271,31 @@ function generateDeck() {
   
   actions_next_seed = [];
   for(action of Object.keys(datas.actions)) {
+    img.src="assets/"+action+".png";
     for(let j = 0; j < datas.actions[action]; j++) {
       actions_next_seed.push(action);
     }
   }
-  shuffle(numbers_next_seed, Number($("#seed").val())+1);
-  shuffle(actions_next_seed, Number($("#seed").val())+1);
+  shuffle(numbers_next_seed, seed+1);
+  shuffle(actions_next_seed, seed*3+1);
   numbers.push(...numbers_next_seed);
   actions.push(...actions_next_seed);
+
+  $("#bonus1").data("number",Math.floor(random(seed)*6 + 1));
+  $("#bonus2").data("number",Math.floor(random(seed*13 + 3)*6 + 1));
+  $("#bonus3").data("number",Math.floor(random(seed*7 - 23)*6 + 1));
   renderCards();
+  renderBonus();
 }
+  
+function set_viewport_height() {
+  // We execute the same script as before
+  let vh = $("#boardgame-img").height() * 0.01;
+  $(document.documentElement).css('--vh', `${vh}px`);
+  //document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+$( window ).resize(set_viewport_height);
 
 $( document ).ready(function() {
     initHouses();
@@ -280,17 +312,44 @@ $( document ).ready(function() {
     $("#seed").val(Math.floor((Math.random() * $("#seed").attr("max")) + 1));
     generateDeck();
 
-    $("#widget-container").append(`<div id=cityname style='left:${xscale*cityname.x}%;top:${yscale*cityname.y}%;'><input type="text"></div>`);
+    $("#widget-container").append(`<div id=cityname class='widget' style='left:${xscale*cityname.x}%;top:${yscale*cityname.y}%;'>
+      <div contenteditable="true" spellcheck="false" placeholder="your perfect home"></div>
+    </div>`);
 
     $( ".house>input" ).on('input',function() {
       console.log($(this).parent().attr('id'));
       updateLandCounter();
     });
 
-    $(".bonus>input").on('input',function(){
+    /*$(".bonus>input").on('input',function(){
       var sum = 0;
       $('.bonus>input').each(function() {
           sum += Number($(this).val());
+      });
+      $('#bonus-score>span').text(sum);
+      updateTotalScore();
+    });*/
+
+    $(".bonus-check").click(function() {
+      var result = $(this).toggleClass("check");
+      var sibling = $(this).siblings(".bonus-check");
+      if($(sibling).hasClass("check")) {
+        $(sibling).removeClass("check");
+      }
+      
+      var bonus_card = $(this).siblings("img");
+      var row = Number($(bonus_card).data("row")) - 1;
+      if (result.hasClass('check')) {
+        var number = Number($(bonus_card).data("number")) - 1;
+        var bonus_id = $(this).hasClass("bonus-check-1") ? 0 : 1;
+        $("#bonus-"+row+">span").text(bonus_cards_scores[row][number][bonus_id]);
+      } else {
+        $("#bonus-"+row+">span").text(0);
+      }
+
+      var sum = 0;
+      $('.bonus-score>span').each(function() {
+          sum += Number($(this).text());
       });
       $('#bonus-score>span').text(sum);
       updateTotalScore();
@@ -340,7 +399,7 @@ $( document ).ready(function() {
 
     $(".work").click(function() {
       console.log($(this).attr('id'));
-      $(this).toggleClass("checked");
+      $(this).toggleClass("check");
     });
 
     $(".work-score").click(function() {
@@ -425,7 +484,6 @@ $( document ).ready(function() {
       $("span", this).text(0);
     });
 
-
     updateLandCounter();
 
     $("#next").click(function() {
@@ -466,4 +524,9 @@ $( document ).ready(function() {
       $(this).val(i);
       generateDeck();
     });
+});
+
+
+$( window ).on( "load", function() {
+    set_viewport_height();
 });

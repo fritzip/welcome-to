@@ -1,21 +1,19 @@
 :root {
-  --borderWidth: 7px;
-  --height: 24px;
-  --width: 12px;
-  --wRed : 211, 92, 60;
+  --wRed : 213, 74, 52;
   --wGreen : 133, 176, 105;
-  --wBlue : 146,195,189;
+  --wBlue : 144, 197, 182;
+  --vh: 1vh;
 }
 
 body {
   margin:0;
   padding: 0;
   overflow-x: hidden;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-weight: bold;
 }
 
-input {
+input, textarea {
   border: none;
   background-color: rgba(255,255,255, 0.5);
   text-align: center;
@@ -97,6 +95,7 @@ input {
 
 #round-management > * {
   font-size: 2vmin;
+  font-size:calc(2*var(--vh));
   border: none;
   outline: none;
 }
@@ -135,6 +134,7 @@ button:hover {
 #seed-management > * {
   flex-grow:1;
   font-size: 1.5vmin;
+  font-size:calc(1.5*var(--vh));
 }
 
 .indicator {
@@ -147,14 +147,14 @@ button:hover {
   flex-flow: column nowrap;
   /*flex: 1 1 auto; */
   justify-content: flex-start;
-  flex-shrink: 1;
+  /*flex-shrink: 1;*/
 }
 
 .card-pair {
   display: flex;
   flex-flow: row nowrap;
   flex-grow: 1;
-  flex-shrink: 1;
+  /*flex-shrink: 1;*/
 }
 
 .card {
@@ -166,10 +166,65 @@ button:hover {
 
 .card > img {
   max-height: 33.33vh;
+  /*max-height: calc(33.33*var(--vh));*/
+  /*max-height: 233px;*/
   max-width: 100%;
   object-fit: scale-down;
   /*max-height:33.33vh;*/
 }
+
+.next-action-card {
+  position: absolute;
+  width: 21%;
+  border:2px solid rgb(90, 60, 36);
+  border-radius: 4px;
+}
+
+.next-action-card.top {
+  float: left;
+  top:11%;
+  left:12%;
+}
+
+.next-action-card.bottom {
+  float: right;
+  bottom:11%;
+  right:12%;
+}
+/*
+.flip-card {
+  position: absolute;
+  float: right;
+  bottom: 10%;
+  right: 10%;
+  font-size:2.5vmin;
+  color: rgb(var(--wRed));
+  text-shadow:0px 0px 8px white,0px 0px 2px white;
+  transform: translate(50%,50%);
+  transition: .2s ease;
+}
+
+.flip-card:hover {
+  transform: translate(50%,50%);
+  font-size:3vmin;
+}
+
+.bonus-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .4s ease;
+  background-color: rgb(255, 255, 255);
+}
+
+.card:hover .bonus-overlay {
+  opacity: 0.1;
+}*/
 
 .number {
   background-color: rgba(255, 255, 255, 0.5);
@@ -181,21 +236,46 @@ button:hover {
   top:50%;
   transform: translate(-50%,-50%);
   font-size:4vmin;
+  font-size:calc(4*var(--vh));
+}
+
+.widget {
+  float:left;
+  position:absolute;
+  transform: translate(-1px,-1px);
 }
 
 #cityname {
+  display: table;
   position:absolute;
   float:left;
   border-radius:3px;
-  width: 15%;
-  height: 5%;
+  width: 14.5%;
+  height: 4.5%;
 }
 
-#cityname > input {
+#cityname > div {
   width:100%;
   height: 100%;
   font-size: 2vmin;
+  font-size:calc(2*var(--vh));
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  resize: none;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  word-break: break-word;
+  outline: none;
 }
+
+/*[placeholder]:empty::before {
+    content: attr(placeholder);
+    color: rgb(151, 151, 151); 
+}
+
+[placeholder]:empty:focus::before {
+    content: "";
+}*/
 
 .house {
   /*background-color: blue;
@@ -203,14 +283,15 @@ button:hover {
   border-radius:3px;
   float:left;
   position:absolute;
-  width:5%;
-  height:5%;
+  width:4.5%;
+  height:4.5%;
 }
 
 .house > input {
   width:100%;
   height: 100%;
   font-size:3vmin;
+  font-size:calc(3*var(--vh));
 }
 
 /*** Remove arrows from number inputs ***/
@@ -227,27 +308,25 @@ input[type=number] {
 }
 /*** ***/
 
-.widget {
-  float:left;
-  position:absolute;
+.bonus-check {
+  width: 25%;
+  height: 15%;
+  /*background-color: blue;
+  opacity: 0.5;*/
+  font-size:5vmin;
+  font-size:calc(5*var(--vh));
+  position: absolute;
+  bottom: 10%;
 }
 
-.bonus {
-  width:4%;
-  height:4%;
-  /*border-radius: 10px;*/
-  /*cursor: pointer;
-  background-color: rgb(58, 187, 75);*/
+.bonus-check-1 {
+  float: left;
+  left:18%;
 }
 
-.bonus > input {
-  margin: 0;
-  padding: 0;
-  font-size:2.5vmin;
-  min-width: 0px;
-  max-width: 2.5ch;
-  background-color: rgba(255,255,255, 0.0);
-  transform: translate(-50%, -50%);
+.bonus-check-2 {
+  float: right;
+  right:16%;
 }
 
 .park {
@@ -270,6 +349,8 @@ input[type=number] {
 .pool {
   width:6%;
   height:3%;
+  font-size:3vmin;
+  font-size:calc(3*var(--vh));
 }
 
 .pool:hover {
@@ -303,12 +384,12 @@ input[type=number] {
 }
 
 .work {
-  background-color: brown;
+  /*background-color: brown;
   opacity: 0.3;
-  border-radius:3px;
+  border-radius:3px;*/
   width:2%;
   height:2%;
-  transform: rotate(45deg);
+  /*transform: rotate(45deg);
   cursor: pointer;
 }
 
@@ -317,7 +398,7 @@ input[type=number] {
 }
 
 .work.checked {
-  opacity: 0.8;
+  opacity: 0.8;*/
 }
 
 .work-score {
@@ -343,8 +424,17 @@ input[type=number] {
   background-color: rgb(var(--wBlue));
 }
 
+/*.landcounter {
+  width:4%;
+  height:4%;
+  transform: translateY(-50%);
+}*/
+
 .landcounter > span {
+  /*display: inline-block;
+  width: 100%;*/
   font-size: 2vmin;
+  font-size:calc(2*var(--vh));
   margin: 0;
   padding: 2px 1px;
   background-color: rgba(var(--wBlue),0.5);
@@ -359,7 +449,7 @@ input[type=number] {
 }
 
 .bis.check {
-  background-color: rgb(208,95,63);
+  background-color: rgb(var(--wRed));
 }
 
 .cantplay {
@@ -371,16 +461,12 @@ input[type=number] {
 }
 
 .cantplay.check {
-  background-color: rgb(208,95,63);
+  background-color: rgb(var(--wRed));
 }
 
-.check, .checkable:hover {
-  text-align: center;
-  color:#8bee28;
-  text-shadow:0px 0px 8px rgb(0, 0, 0),0px 0px 2px rgb(0, 0, 0);/*,-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
-  font-size: 2.5vmin ;
-  font-weight: bold;
-}
+/*.check, .checkable:hover {
+
+}*/
 
 .check.checkable {
   border: none
@@ -393,6 +479,19 @@ input[type=number] {
 
 .check:before, .checkable:hover::before {
   content: '✔';
+  color:#8bee28;
+  text-shadow:0px 0px 8px rgb(0, 0, 0),0px 0px 2px rgb(0, 0, 0);/*,-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
+  /*font-size: 2.5vmin;
+  font-weight: bold;*/
+
+  position: absolute;
+  display: block;
+  top: 50%;
+  left:50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
 .total-score {
@@ -401,13 +500,13 @@ input[type=number] {
   transform: translate(-50%, -50%);
   /*background-color: rgba(0, 38, 255, 0.5);*/
   font-size:2.5vmin;
+  font-size:calc(2.5*var(--vh));
   display: flex;
   justify-content: center;
   flex-direction: column;
   color: darkslategrey;
   cursor: default;
 }
-
 
 span {
   text-align: center;

@@ -6,11 +6,14 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <meta http-equiv="Content-Script-Type" content="text/javascript">
 <link rel="stylesheet" type="text/css" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
 
 <script
   src="https://code.jquery.com/jquery-3.4.1.min.js"
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
+  crossorigin="anonymous">
+</script>
+<script src="jquery.fittext.js"></script>
 <script type="text/javascript" src="xytab.js"></script>
 <script type="text/javascript" src="script.js"></script>
 </head>
@@ -18,12 +21,12 @@
 <body>
   <div id="boardgame">
     <div id="scoresheet" onmousemove="capmouse(event)" onclick="showP()">
-        <img src="assets/welcome_to.jpg" id="boardgame-img">
+        <img src="assets/score-sheet.png" id="boardgame-img">
         <div id="mega-widget-container">
           <div id="widget-container">
             <div class="management" id="round-management">
               <button id="prev" class="previous">◀</button>
-                <input id="round" type="number" min="1" max="33" value="1">
+                <input id="round" type="number" min="1" max="36" value="1">
               <button id="next" class="next">▶</button>
             </div>
             <div class="management" id="seed-management">
@@ -35,16 +38,31 @@
     <div id="side-panel">
       <div id="card-container">
         <div class="card-pair">
-          <div class="card"><img id="action1" src="assets/pool.png"></div>
-          <div class="card"><img src="assets/num.png"><span id="number1" class="number"></span></div>
+          <div class="card"><img class="card-img" id="action1" src="assets/pool.png"><img class="buffer-action-card"></div>
+          <div class="card"><img class="card-img" src="assets/num.png"><span id="number1" class="number"></span><img class="next-action-card top"><img class="next-action-card bottom"></div>
+          <div class="card">
+            <img class="card-img bonus-card" id="bonus1" data-row="1" data-number=""  src="assets/bonus/bonus-neutral.jpg">
+            <div class="bonus-check bonus-check-1 widget checkable"></div>
+            <div class="bonus-check bonus-check-2 widget checkable"></div>
+          </div>
         </div>
         <div class="card-pair">
-          <div class="card"><img id="action2" src="assets/landprice.png"></div>
-          <div class="card"><img src="assets/num.png"><span id="number2" class="number"></span></div>
+          <div class="card"><img class="card-img" id="action2" src="assets/landprice.png"><img class="buffer-action-card"></div>
+          <div class="card"><img class="card-img" src="assets/num.png"><span id="number2" class="number"></span><img class="next-action-card top"><img class="next-action-card bottom"></div>
+          <div class="card">
+            <img class="card-img bonus-card" id="bonus2" data-row="2" data-number=""  src="assets/bonus/bonus-neutral.jpg">
+            <div class="bonus-check bonus-check-1 widget checkable"></div>
+            <div class="bonus-check bonus-check-2 widget checkable"></div>
+          </div>
         </div>
         <div class="card-pair">
-          <div class="card"><img id="action3" src="assets/work.png"></div>
-          <div class="card"><img src="assets/num.png"><span id="number3" class="number"></span></div>
+          <div class="card"><img  class="card-img" id="action3" src="assets/work.png"><img class="buffer-action-card"></div>
+          <div class="card"><img class="card-img" src="assets/num.png"><span id="number3" class="number"></span><img class="next-action-card top"><img class="next-action-card bottom"></div>
+          <div class="card">
+            <img class="card-img bonus-card" id="bonus3" data-row="3" data-number="" src="assets/bonus/bonus-neutral.jpg">
+            <div class="bonus-check bonus-check-1 widget checkable"></div>
+            <div class="bonus-check bonus-check-2 widget checkable"></div>
+          </div>
         </div>
       </div>
   </div>
