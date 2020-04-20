@@ -159,7 +159,7 @@ function updateLandCounter() {
     housingEstateSize = 0;
     var housesDOM = $(".house[data-row='" + row +"']>input").get();
     var fencesDOM = $(".fence[data-row='" + row +"']").get();
-    for (var i=0; i<housesDOM.length; ++i) {
+    for (var i=0; i<housesDOM.length; ++i) {
       if($(housesDOM[i]).val()) {
         housingEstateSize++;
       } else {
