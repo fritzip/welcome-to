@@ -309,7 +309,57 @@ function preloadImages(array) {
     }
 }
 
+function reset_board() {
+  var r = confirm("Reset board ?");
+  if (r == false) {
+    return false;
+  }
+  $(".house>input").each(function() {
+    $(this).val("");
+  });
+  $(".widget").each(function() {
+    $(this).removeClass("checked").removeClass("check");
+  });
+  $(".total-score>span").each(function() {
+    $(this).text("0");
+  });
+  $(".park").each(function() {
+    $(this).removeClass("checkable");
+  });
+  $(".landprice").each(function() {
+    $(this).removeClass("checkable");
+  });
+  $(".bis").each(function() {
+    $(this).removeClass("checkable");
+  });
+  $(".cantplay").each(function() {
+    $(this).removeClass("checkable");
+  });
+
+  $(".park[data-row='0']:first").addClass("checkable");
+  $(".park[data-row='1']:first").addClass("checkable");
+  $(".park[data-row='2']:first").addClass("checkable");
+
+  $(".landprice[data-col='0']:first").addClass("checkable");
+  $(".landprice[data-col='1']:first").addClass("checkable");
+  $(".landprice[data-col='2']:first").addClass("checkable");
+  $(".landprice[data-col='3']:first").addClass("checkable");
+  $(".landprice[data-col='4']:first").addClass("checkable");
+  $(".landprice[data-col='5']:first").addClass("checkable");
+
+  $(".bis:first").addClass("checkable");
+
+  $(".cantplay:first").addClass("checkable");
+  $("#cityname>div").text("");
+  $('#round').val(1);
+  renderCards();
+}
+
 $( document ).ready(function() {
+    $("#widget-container").append(`<div id=cityname class='widget' style='left:${xscale*cityname.x}%;top:${yscale*cityname.y}%;'>
+      <div contenteditable="true" spellcheck="false" placeholder="your perfect home"></div>
+    </div>`);
+
     initHouses();
     initBonus();
     initParks();
@@ -324,9 +374,6 @@ $( document ).ready(function() {
     $("#seed").val(Math.floor((Math.random() * $("#seed").attr("max")) + 1));
     generateDeck();
 
-    $("#widget-container").append(`<div id=cityname class='widget' style='left:${xscale*cityname.x}%;top:${yscale*cityname.y}%;'>
-      <div contenteditable="true" spellcheck="false" placeholder="your perfect home"></div>
-    </div>`);
 
     $(".action-card").on('load', function () {
       $(this).removeClass("loading-img");
@@ -336,20 +383,10 @@ $( document ).ready(function() {
       $(this).removeClass("loading-img");
     });
 
-
     $( ".house>input" ).on('input',function() {
       console.log($(this).parent().attr('id'));
       updateLandCounter();
     });
-
-    /*$(".bonus>input").on('input',function(){
-      var sum = 0;
-      $('.bonus>input').each(function() {
-          sum += Number($(this).val());
-      });
-      $('#bonus-score>span').text(sum);
-      updateTotalScore();
-    });*/
 
     $(".bonus-check").click(function() {
       var result = $(this).toggleClass("check");
