@@ -1,7 +1,6 @@
 var posx;var posy;
 var actions = [];
 var numbers = [];
-var img=new Image();
 
 function capmouse(e) {
   // captures the mouse position
@@ -218,24 +217,18 @@ function random(seed) {
   var x = Math.sin(seed++) * 10000; 
   return x - Math.floor(x);
 }
-
-function preloadImage(url)
-{
-    var img=new Image();
-    img.src=url;
-}
-
+ 
 function renderCards() {
   var i = $("#round").val();
-  $("#action1").attr("src","assets/"+actions[i*3]+".png");
-  $("#action2").attr("src","assets/"+actions[i*3 + 1]+".png");
-  $("#action3").attr("src","assets/"+actions[i*3 + 2]+".png");
+  $("#action1").addClass("loading-img").attr("src","assets/"+actions[i*3]+".png");
+  $("#action2").addClass("loading-img").attr("src","assets/"+actions[i*3 + 1]+".png");
+  $("#action3").addClass("loading-img").attr("src","assets/"+actions[i*3 + 2]+".png");
   $("#number1").text(numbers[i*3]);
   $("#number2").text(numbers[i*3 + 1]);
   $("#number3").text(numbers[i*3 + 2]);
-  $("#number1").nextAll(':lt(2)').attr("src","assets/"+actions[i*3 + 3]+"-ico.png");
-  $("#number2").nextAll(':lt(2)').attr("src","assets/"+actions[i*3 + 4]+"-ico.png");
-  $("#number3").nextAll(':lt(2)').attr("src","assets/"+actions[i*3 + 5]+"-ico.png");
+  $("#number1").nextAll(':lt(2)').addClass("loading-img").attr("src","assets/"+actions[i*3 + 3]+"-ico.png");
+  $("#number2").nextAll(':lt(2)').addClass("loading-img").attr("src","assets/"+actions[i*3 + 4]+"-ico.png");
+  $("#number3").nextAll(':lt(2)').addClass("loading-img").attr("src","assets/"+actions[i*3 + 5]+"-ico.png");
 }
 
 function renderBonus() {
@@ -271,7 +264,6 @@ function generateDeck() {
   
   actions_next_seed = [];
   for(action of Object.keys(datas.actions)) {
-    img.src="assets/"+action+".png";
     for(let j = 0; j < datas.actions[action]; j++) {
       actions_next_seed.push(action);
     }
@@ -315,6 +307,15 @@ $( document ).ready(function() {
     $("#widget-container").append(`<div id=cityname class='widget' style='left:${xscale*cityname.x}%;top:${yscale*cityname.y}%;'>
       <div contenteditable="true" spellcheck="false" placeholder="your perfect home"></div>
     </div>`);
+
+    $(".action-card").on('load', function () {
+      $(this).removeClass("loading-img");
+    });
+
+    $(".next-action-card").on('load', function () {
+      $(this).removeClass("loading-img");
+    });
+
 
     $( ".house>input" ).on('input',function() {
       console.log($(this).parent().attr('id'));

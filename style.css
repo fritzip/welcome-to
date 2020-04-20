@@ -173,6 +173,19 @@ button:hover {
   /*max-height:33.33vh;*/
 }
 
+.action-card {
+  position: absolute;
+  z-index: 2;
+  float: left;
+  left: 0;
+  top:0;
+}
+
+.loading-img {
+  opacity: 0.0;
+  transition: all 0.7s linear;
+}
+
 .next-action-card {
   position: absolute;
   width: 21%;
