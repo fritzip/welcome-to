@@ -248,14 +248,14 @@ function generateDeck() {
   var seed = Number($("#seed").val());
   numbers = [];
   for(i of Object.keys(datas.numbers)) {
-    for(let j = 0; j < datas.numbers[i]; j++) {
+    for(let j = 0; j < datas.numbers[i]; j++) {
       numbers.push(i);
     }
   }
   
   actions = [];
   for(action of Object.keys(datas.actions)) {
-    for(let j = 0; j < datas.actions[action]; j++) {
+    for(let j = 0; j < datas.actions[action]; j++) {
       actions.push(action);
     }
   }
@@ -264,7 +264,7 @@ function generateDeck() {
 
   numbers_next_seed = [];
   for(i of Object.keys(datas.numbers)) {
-    for(let j = 0; j < datas.numbers[i]; j++) {
+    for(let j = 0; j < datas.numbers[i]; j++) {
       numbers_next_seed.push(i);
     }
   }
@@ -272,7 +272,7 @@ function generateDeck() {
   actions_next_seed = [];
   for(action of Object.keys(datas.actions)) {
     img.src="assets/"+action+".png";
-    for(let j = 0; j < datas.actions[action]; j++) {
+    for(let j = 0; j < datas.actions[action]; j++) {
       actions_next_seed.push(action);
     }
   }

@@ -171,19 +171,19 @@ var cantplay = [
 ];
 
 var total_scores = [
-  { 'x' : 0.075, 'y' : 0.921, 'id' : 'bonus-score' },
-  { 'x' : 0.1555, 'y' : 0.921, 'id' : 'park-score' },
-  { 'x' : 0.2455, 'y' : 0.921, 'id' : 'pool-score' },
-  { 'x' : 0.351, 'y' : 0.921, 'id' : 'work-score' },
-  { 'x' : 0.453, 'y' : 0.921, 'id' : 'landprice-score-0' },
-  { 'x' : 0.498, 'y' : 0.921, 'id' : 'landprice-score-1' },
-  { 'x' : 0.543, 'y' : 0.921, 'id' : 'landprice-score-2' },
-  { 'x' : 0.588, 'y' : 0.921, 'id' : 'landprice-score-3' },
-  { 'x' : 0.637, 'y' : 0.921, 'id' : 'landprice-score-4' },
-  { 'x' : 0.686, 'y' : 0.921, 'id' : 'landprice-score-5' },
-  { 'x' : 0.779, 'y' : 0.921, 'id' : 'bis-score' },
-  { 'x' : 0.866, 'y' : 0.921, 'id' : 'cantplay-score' },
-  { 'x' : 0.935, 'y' : 0.921, 'id' : 'total-score' },
+  { 'x' : 0.075, 'y' : 0.921, 'id' : 'bonus-score' },
+  { 'x' : 0.1555, 'y' : 0.921, 'id' : 'park-score' },
+  { 'x' : 0.2455, 'y' : 0.921, 'id' : 'pool-score' },
+  { 'x' : 0.351, 'y' : 0.921, 'id' : 'work-score' },
+  { 'x' : 0.453, 'y' : 0.921, 'id' : 'landprice-score-0' },
+  { 'x' : 0.498, 'y' : 0.921, 'id' : 'landprice-score-1' },
+  { 'x' : 0.543, 'y' : 0.921, 'id' : 'landprice-score-2' },
+  { 'x' : 0.588, 'y' : 0.921, 'id' : 'landprice-score-3' },
+  { 'x' : 0.637, 'y' : 0.921, 'id' : 'landprice-score-4' },
+  { 'x' : 0.686, 'y' : 0.921, 'id' : 'landprice-score-5' },
+  { 'x' : 0.779, 'y' : 0.921, 'id' : 'bis-score' },
+  { 'x' : 0.866, 'y' : 0.921, 'id' : 'cantplay-score' },
+  { 'x' : 0.935, 'y' : 0.921, 'id' : 'total-score' },
 ];
 
 var cityname = {'x': 0.055, 'y':0.164};
