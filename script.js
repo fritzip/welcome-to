@@ -530,4 +530,5 @@ $( document ).ready(function() {
 
 $( window ).on( "load", function() {
     set_viewport_height();
+    $("#loading_wrap").remove();
 });

@@ -5,6 +5,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <meta http-equiv="Content-Script-Type" content="text/javascript">
+<script src="pace.min.js"></script>
+<link href="pace-theme.css" rel="stylesheet" />
+
 <link rel="stylesheet" type="text/css" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
 
@@ -18,6 +21,7 @@
 </head>
 
 <body>
+  <div id='loading_wrap' style='position:fixed; height:100%; width:100%; overflow:hidden; top:0; left:0;z-index:1001;background-color:white;'></div>
   <div id="boardgame">
     <!--div id="scoresheet" onmousemove="capmouse(event)" onclick="showP()"-->
     <div id="scoresheet">
