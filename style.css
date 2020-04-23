@@ -179,7 +179,7 @@ button:hover {
   /*max-height:33.33vh;*/
 }
 
-.action-card {
+.action-card, .bonus-card {
   position: absolute;
   z-index: 2;
   float: left;

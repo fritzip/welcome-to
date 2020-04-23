@@ -233,7 +233,7 @@ function renderCards() {
 
 function renderBonus() {
   $(".bonus-card").each(function() {
-    $(this).attr("src","assets/bonus/bonus"+$(this).data("row")+"r"+$(this).data("number")+".jpg");
+    $(this).addClass("loading-img").attr("src","assets/bonus/bonus"+$(this).data("row")+"r"+$(this).data("number")+".jpg");
   });
 }
 
@@ -375,11 +375,7 @@ $( document ).ready(function() {
     generateDeck();
 
 
-    $(".action-card").on('load', function () {
-      $(this).removeClass("loading-img");
-    });
-
-    $(".next-action-card").on('load', function () {
+    $(".action-card, .next-action-card, .bonus-card").on('load', function () {
       $(this).removeClass("loading-img");
     });
 
