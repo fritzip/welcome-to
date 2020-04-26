@@ -323,6 +323,9 @@ function reset_board() {
   $(".total-score>span").each(function() {
     $(this).text("0");
   });
+  $(".landcounter>span").each(function() {
+    $(this).text("0");
+  });
   $(".park").each(function() {
     $(this).removeClass("checkable");
   });
@@ -391,7 +394,7 @@ $( document ).ready(function() {
         $(sibling).removeClass("check");
       }
       
-      var bonus_card = $(this).siblings("img");
+      var bonus_card = $(this).siblings(".bonus-card");
       var row = Number($(bonus_card).data("row")) - 1;
       if (result.hasClass('check')) {
         var number = Number($(bonus_card).data("number")) - 1;
