@@ -12,8 +12,8 @@ services:
     ports:
       - 8089:80
     labels:
-      - "traefik.docker.network=proxy"
       - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
       - "traefik.http.routers.welcome.entrypoints=websecure"
       - "traefik.http.routers.welcome.rule=Host(`yourdomain.com`) && PathPrefix(`/welcome`)"
       - "traefik.http.middlewares.welcome-stripprefix.stripprefix.prefixes=/welcome"
