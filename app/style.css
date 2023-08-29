@@ -11,6 +11,7 @@ body {
   overflow-x: hidden;
   font-family: "Oswald", sans-serif;
   font-weight: bold;
+  background-color: #383838;
 }
 
 input,
@@ -143,10 +144,23 @@ button:hover {
   position: relative;
 }
 
-.card > img {
-  max-height: 33.33vh;
-  max-width: 100%;
+.card-img {
+  max-width: calc(33vw / 3);
+  max-height: min(calc(1158px / 3), calc(100vh / 3));
   object-fit: scale-down;
+}
+
+/* Vertical layout */
+@media (max-aspect-ratio: 1/1) {
+  #boardgame {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-img {
+    max-width: calc(70vw / 3);
+    object-fit: scale-down;
+  }
 }
 
 .action-card,
