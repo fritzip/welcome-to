@@ -22,7 +22,10 @@ body {
   height: 100%;
   z-index: 9999;
   background-color: #494949;
-  opacity: 0.9;
+  opacity: 0.85;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .loader {
@@ -34,10 +37,7 @@ body {
   position: relative;
   box-sizing: border-box;
   animation: rotation 2s linear infinite;
-
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  margin-bottom: 10vh;
 }
 .loader::after {
   content: "";
