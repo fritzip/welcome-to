@@ -156,8 +156,10 @@ button::-moz-focus-inner {
   border: 0;
 }
 
-button:hover {
-  background-color: #70dad4;
+@media (hover: hover) {
+  button:hover {
+    background-color: #70dad4;
+  }
 }
 
 #reset {
@@ -359,8 +361,10 @@ input[type="number"] {
   font-size: calc(3 * var(--vh));
 }
 
-.pool:hover {
-  background-color: rgba(var(--wBlue), 0.4);
+@media (hover: hover) {
+  .pool:hover {
+    background-color: rgba(var(--wBlue), 0.4);
+  }
 }
 
 .pool-check {
@@ -381,8 +385,10 @@ input[type="number"] {
   cursor: pointer;
 }
 
-.fence:hover {
-  opacity: 0.5;
+@media (hover: hover) {
+  .fence:hover {
+    opacity: 0.5;
+  }
 }
 
 .fence.checked {
@@ -403,8 +409,10 @@ input[type="number"] {
   z-index: 3;
 }
 
-.checkable:hover {
-  cursor: pointer;
+@media (hover: hover) {
+  .checkable:hover {
+    cursor: pointer;
+  }
 }
 
 .work-score.check {
@@ -454,13 +462,28 @@ input[type="number"] {
   border: none;
 }
 
-.check.checkable:hover::before {
-  color: rgb(var(--wRed));
-  content: "\2718";
+@media (hover: hover) {
+  .check.checkable:hover::before {
+    color: rgb(var(--wRed));
+    content: "\2718";
+  }
+  .checkable:hover::before {
+    content: "\2714";
+    color: #8bee28;
+    text-shadow: 0px 0px 8px rgb(0, 0, 0), 0px 0px 2px rgb(0, 0, 0); /*,-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
+
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
 }
 
-.check:before,
-.checkable:hover::before {
+.check:before {
   content: "\2714";
   color: #8bee28;
   text-shadow: 0px 0px 8px rgb(0, 0, 0), 0px 0px 2px rgb(0, 0, 0); /*,-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
