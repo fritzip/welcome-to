@@ -22,7 +22,7 @@ body {
   height: 100%;
   z-index: 9999;
   background-color: #494949;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .loader {
