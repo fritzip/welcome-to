@@ -463,13 +463,13 @@ input[type="number"] {
 }
 
 @media (hover: hover) {
-  .check.checkable:hover::before {
+  .hasNoTouch .check.checkable:hover::before {
     color: rgb(var(--wRed));
     content: "\2718";
   }
 
-  .check:before,
-  .checkable:hover::before {
+  .hasNoTouch .check:before,
+  .hasNoTouch .checkable:hover::before {
     content: "\2714";
     color: #8bee28;
     text-shadow: 0px 0px 8px rgb(0, 0, 0), 0px 0px 2px rgb(0, 0, 0); /*,-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
@@ -486,7 +486,7 @@ input[type="number"] {
 }
 
 @media (hover: none) {
-  .check::before {
+  .hasTouch .check::before {
     content: "\2714";
     color: #58921f;
     text-shadow: 0px 0px 8px rgb(0, 0, 0), 0px 0px 2px rgb(0, 0, 0); /*,-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
@@ -501,7 +501,7 @@ input[type="number"] {
     transform: translate(-50%, -50%);
   }
 
-  .checkable::before {
+  .hasTouch .checkable::before {
     color: #8bee28;
   }
 }

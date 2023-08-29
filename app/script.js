@@ -3,6 +3,24 @@ var posy;
 var actions = [];
 var numbers = [];
 
+function hasTouch() {
+  return (
+    "ontouchstart" in document.documentElement ||
+    navigator.maxTouchPoints > 0 ||
+    navigator.msMaxTouchPoints > 0
+  );
+}
+
+function setBodyTouchClass() {
+  if (hasTouch()) {
+    $("body").removeClass("hasNoTouch");
+    $("body").addClass("hasTouch");
+  } else {
+    $("body").removeClass("hasTouch");
+    $("body").addClass("hasNoTouch");
+  }
+}
+
 function capmouse(e) {
   // captures the mouse position
   posx = 0;
@@ -733,6 +751,12 @@ $(document).ready(function () {
     $(this).val(i);
     generateDeck();
   });
+
+  setBodyTouchClass();
+});
+
+$(window).on("resize", function () {
+  setBodyTouchClass();
 });
 
 $(window).on("load", function () {
@@ -752,6 +776,5 @@ $(window).on("load", function () {
     "assets/work.png",
     "assets/work-ico.png",
   ]);
-  //$("#loading_wrap").remove();
   $(".loader-holder").fadeOut("slow");
 });
