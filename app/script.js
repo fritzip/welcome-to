@@ -735,6 +735,10 @@ $(document).ready(function () {
   });
 });
 
+document.addEventListener("touchstart", function () {
+  document.body.classList.add("touch-interaction");
+});
+
 $(window).on("load", function () {
   set_viewport_height();
 
