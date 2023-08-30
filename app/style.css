@@ -336,7 +336,7 @@ input[type="number"] {
   font-size: 5vmin;
   font-size: calc(5 * var(--vh));
   position: absolute;
-  bottom: 10%;
+  bottom: 8%;
 }
 
 .bonus-check-1 {
