@@ -758,3 +758,7 @@ $(window).on("load", function () {
   ]);
   $(".loader-holder").fadeOut("slow");
 });
+
+$(window).bind("beforeunload", function () {
+  return "Are you sure you want to leave? Everything will be lost.";
+});
