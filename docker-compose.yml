@@ -10,8 +10,6 @@ services:
     restart: unless-stopped
     networks:
       - proxy
-    ports:
-      - 8089:80
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
