@@ -14,7 +14,10 @@ services:
       - "traefik.http.routers.welcome.entrypoints=websecure"
       - "traefik.http.routers.welcome.rule=Host(`${DOMAIN}`) && PathPrefix(`/${PATH_PREFIX}`)"
       - "traefik.http.middlewares.welcome-stripprefix.stripprefix.prefixes=/${PATH_PREFIX}"
-      - "traefik.http.routers.welcome.middlewares=trailing-slash@file,welcome-stripprefix@docker"
+      - "traefik.http.routers.welcome.middlewares=welcome-redirectregex,welcome-stripprefix"
+      - "traefik.http.middlewares.welcome-redirectregex.redirectregex.regex=^https?://([\\w.-]+)/${PATH_PREFIX}$$"
+      - "traefik.http.middlewares.welcome-redirectregex.redirectregex.replacement=https://$$1/${PATH_PREFIX}/"
+      - "traefik.http.middlewares.welcome-redirectregex.redirectregex.permanent=true"
       - "traefik.http.services.welcome.loadbalancer.server.port=80"
 
 networks:
