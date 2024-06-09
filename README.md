@@ -1,4 +1,4 @@
-# Welcome to...
+# Welcome to... [![Release](https://github.com/fritzip/welcome-to/actions/workflows/deploy.yml/badge.svg)](https://github.com/fritzip/welcome-to/actions/workflows/deploy.yml)
 
 Implementation of the famous boardgame by Benoit Turpin. This project is a web-based version of the game, allowing you to play with your friends online.
 
