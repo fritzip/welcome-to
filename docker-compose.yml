@@ -16,8 +16,8 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.welcome.entrypoints=websecure"
-      - "traefik.http.routers.welcome.rule=Host(`${DOMAINNAME}`) && PathPrefix(`/${PREFIX}`)"
-      - "traefik.http.middlewares.welcome-stripprefix.stripprefix.prefixes=/${PREFIX}"
+      - "traefik.http.routers.welcome.rule=Host(`${DOMAIN}`) && PathPrefix(`/${PATH_PREFIX}`)"
+      - "traefik.http.middlewares.welcome-stripprefix.stripprefix.prefixes=/${PATH_PREFIX}"
       - "traefik.http.routers.welcome.middlewares=trailing-slash@file,welcome-stripprefix@docker"
 
 networks:
