@@ -3,7 +3,7 @@ name: welcome
 services:
   static:
     container_name: welcome
-    image: nginx
+    image: ghcr.io/fritzip/welcome-to:latest
     env_file: .env
     restart: unless-stopped
     networks:
@@ -15,6 +15,7 @@ services:
       - "traefik.http.routers.welcome.rule=Host(`${DOMAIN}`) && PathPrefix(`/${PATH_PREFIX}`)"
       - "traefik.http.middlewares.welcome-stripprefix.stripprefix.prefixes=/${PATH_PREFIX}"
       - "traefik.http.routers.welcome.middlewares=trailing-slash@file,welcome-stripprefix@docker"
+      - "traefik.http.services.welcome.loadbalancer.server.port=80"
 
 networks:
   proxy:
