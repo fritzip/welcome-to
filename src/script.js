@@ -757,6 +757,11 @@ $(window).on("load", function () {
     "assets/work-ico.png",
   ]);
   $(".loader-holder").fadeOut("slow");
+
+  // If local dev remove #version-link
+  if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+    $("#version-link").remove();
+  }
 });
 
 $(window).bind("beforeunload", function () {
