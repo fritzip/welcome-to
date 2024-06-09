@@ -74,9 +74,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.meta.outputs.tags }}
-          release_name: ${{ steps.meta.outputs.tags }}
-          body: ${{ steps.meta.outputs.labels }}
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: |
+            Release ${{ github.ref }}
           draft: false
           prerelease: false
 
