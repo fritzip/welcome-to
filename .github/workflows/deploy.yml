@@ -126,4 +126,4 @@ jobs:
             echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             cd ${{ github.event.repository.name }}
             docker compose pull
-            docker compose up
+            docker compose up -d

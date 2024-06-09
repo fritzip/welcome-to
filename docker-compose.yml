@@ -5,8 +5,6 @@ services:
     container_name: welcome
     image: nginx
     env_file: .env
-    volumes:
-      - ./src:/usr/share/nginx/html:ro
     restart: unless-stopped
     networks:
       - proxy
