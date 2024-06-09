@@ -100,7 +100,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: refs/tags/${{ github.event.inputs.version }}
+          ref: ${{ github.event.inputs.version }}
 
       - name: Set tag name
         run: |
