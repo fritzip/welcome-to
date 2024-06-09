@@ -1,17 +1,14 @@
-name: Release
-permissions:
-  packages: write
-  contents: write
+name: Deploy
+
 on:
-  # Triggered on new GitHub Release
+  push:
+    branches:
+      - main
+    tags:
+      - "v*.*.*"
   release:
-    types: [published]
-  # Triggered on every successful Build action
-  workflow_run:
-    workflows: ["Build"]
-    branches: [main, master]
-    types:
-      - completed
+    types: [created]
+
   # Manual trigger for rollback to specific release or redeploy latest
   workflow_dispatch:
     inputs:
@@ -24,19 +21,14 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-  push_to_registry:
-    runs-on: ubuntu-22.04
-    if: ${{ github.event.workflow_run.conclusion != 'failure' }}
+  build-and-push:
+    runs-on: ubuntu-latest
     steps:
       # Checkout latest or specific tag
       - name: Checkout repository
-        if: ${{ github.event.inputs.version == '' || github.event.inputs.version == 'latest' }}
-        uses: actions/checkout@v4
-      - name: Checkout tag
-        if: ${{ github.event.inputs.version != '' && github.event.inputs.version != 'latest' }}
         uses: actions/checkout@v4
         with:
-          ref: refs/tags/${{ github.event.inputs.version }}
+          ref: ${{ github.event.inputs.version }}
 
       - name: Setup buildx
         uses: docker/setup-buildx-action@v3
@@ -67,17 +59,40 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  deploy_via_ssh:
-    needs: push_to_registry
-    runs-on: ubuntu-22.04
-    if: ${{ github.event.workflow_run.conclusion != 'failure' }}
+  create-release:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v') && success()
+
+    steps:
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.meta.outputs.tags }}
+          release_name: ${{ steps.meta.outputs.tags }}
+          body: ${{ steps.meta.outputs.labels }}
+          draft: false
+          prerelease: false
+
+  deploy-staging:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && success()
+
+    steps:
+      - name: Deploy to Staging
+        run: echo "Deploying to Staging Environment..."
+
+  deploy-production:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    # Only deploy on release event, push tags or manual trigger
+    if: (startsWith(github.ref, 'refs/tags/v') || github.event_name == 'release' || github.event_name == 'workflow_dispatch') && success()
     steps:
       # Checkout latest or specific tag
-      - name: Checkout
-        if: ${{ github.event.inputs.version == '' || github.event.inputs.version == 'latest' }}
-        uses: actions/checkout@v4
-      - name: Checkout tag
-        if: ${{ github.event.inputs.version != '' && github.event.inputs.version != 'latest' }}
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           ref: refs/tags/${{ github.event.inputs.version }}
