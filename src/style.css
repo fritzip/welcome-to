@@ -106,6 +106,27 @@ textarea {
   width: 100%;
 }
 
+#version-link {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin-bottom: 3px;
+  margin-right: 7px;
+  font-size: 1.2vmin;
+  font-size: calc(1.2 * var(--vh));
+  color: #383838;
+  text-decoration: none;
+}
+
+#version-link:hover {
+  color: #1d1d1d;
+  text-decoration: underline;
+}
+
+.github-icon {
+  fill: #383838;
+}
+
 #widget-container {
   position: relative;
   display: inline-block;

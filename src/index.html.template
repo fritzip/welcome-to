@@ -37,6 +37,7 @@
             </div>
           </div>
         </div>
+        <a href="https://github.com/fritzip/welcome-to/releases/tag/v${VERSION}" id="version-link">${VERSION}</a>
       </div>
       <div id="side-panel" class="boardgame-zone">
         <div id="card-container">
