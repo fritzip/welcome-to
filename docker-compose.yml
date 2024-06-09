@@ -5,8 +5,6 @@ services:
     container_name: welcome
     image: ghcr.io/fritzip/welcome-to:latest
     env_file: .env
-    ports:
-      - "80:80"
     restart: unless-stopped
     networks:
       - proxy
