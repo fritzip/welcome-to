@@ -20,24 +20,33 @@ on:
         description: Tag you want to release.
         required: true
 
+env:
+  REGISTRY: ghcr.io
+  REPOSITORY_NAME: ${{ github.event.repository.name }}
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
   push_to_registry:
     runs-on: ubuntu-22.04
     if: ${{ github.event.workflow_run.conclusion != 'failure' }}
     steps:
       # Checkout latest or specific tag
-      - name: checkout
+      - name: Checkout repository
         if: ${{ github.event.inputs.version == '' || github.event.inputs.version == 'latest' }}
         uses: actions/checkout@v4
-      - name: checkout tag
+      - name: Checkout tag
         if: ${{ github.event.inputs.version != '' && github.event.inputs.version != 'latest' }}
         uses: actions/checkout@v4
         with:
           ref: refs/tags/${{ github.event.inputs.version }}
 
+      # Setup buildx
+      - name: Setup buildx
+        uses: docker/setup-buildx-action@v3
+
       # Assign environment variables used in subsequent steps
       - name: Env variable assignment
-        run: echo "image_repository_name=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+        run: echo "IMAGE_REPO_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
       # TAG_NAME defaults to 'latest' if not a release or manual deployment
       - name: Assign version
         run: |
@@ -56,6 +65,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
       # Build and push new docker image, skip for manual redeploy other than 'latest'
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
@@ -64,7 +79,10 @@ jobs:
           file: Dockerfile
           context: .
           push: true
-          tags: ghcr.io/${{ env.image_repository_name }}:${{ env.TAG_NAME }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   deploy_via_ssh:
     needs: push_to_registry
@@ -83,9 +101,8 @@ jobs:
 
       - name: repository name fix and env
         run: |
-          echo "image_repository_name=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-          echo "domain=${{ secrets.SSH_HOST }}" >> $GITHUB_ENV
-          echo "letsencrypt_email=${{ secrets.LETSENCRYPT_EMAIL }}" >> $GITHUB_ENV
+          echo "IMAGE_REPO_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          echo "DOMAIN=${{ secrets.SSH_HOST }}" >> $GITHUB_ENV
           echo "TAG_NAME=latest" >> $GITHUB_ENV
           if [ "${{ github.event.release.tag_name }}" != "" ]; then
             echo "TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
@@ -96,29 +113,23 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "Populating .env file"
+          echo "Generating .env file"
 
+          echo "Copy .env.example to .env"
+          cp .env.example .env
+
+          # Set environment variables
           DOMAIN=${{ secrets.SSH_HOST }}
-          IMAGE_REPO=${{ env.image_repository_name }}
+          IMAGE_REPO=${{ env.IMAGE_REPO_NAME }}
           VERSION=${{ env.TAG_NAME }}
 
-          # Loop through each environment variable
-          while IFS= read -r line; do
-              # Extract variable name
-              var=$(echo "$line" | cut -d '=' -f1)
+          # Replace variables in .env file
+          sed -i "s/SSH_HOST=.*/SSH_HOST=$DOMAIN/" .env
+          sed -i "s/IMAGE_REPO=.*/IMAGE_REPO=$IMAGE_REPO/" .env
+          sed -i "s/VERSION=.*/VERSION=$VERSION/" .env
 
-              # Check if variable exists and has a value in .env.example
-              if grep -q "^$var=" .env.example; then
-                  # Echo warning about overwriting
-                  echo "Warning: Overwriting value for $var"
-
-                  # Replace the value with the desired one
-                  sed -i "s/^$var=.*/$var=${!var}_VALUE/" .env.example
-              else
-                  # Add the variable with its value to .env.example
-                  echo "$var=${!var}_VALUE" >> .env.example
-              fi
-          done < <(grep '=' .env.example)
+          # Display .env file
+          cat .env
 
       # Copy docker-compose and .env files to target server
       - name: copy files to target server via scp
