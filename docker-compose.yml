@@ -4,7 +4,6 @@ services:
   static:
     container_name: welcome
     image: ghcr.io/fritzip/welcome-to:latest
-    env_file: .env
     restart: unless-stopped
     networks:
       - proxy
