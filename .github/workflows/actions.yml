@@ -9,6 +9,10 @@ on:
   release:
     types: [created]
 
+  # Run on the 1st of every month at 04:00 UTC
+  schedule:
+    - cron: "0 4 1 * *"
+
   # Manual trigger for rollback to specific release or redeploy latest
   workflow_dispatch:
     inputs:
@@ -20,15 +24,20 @@ on:
 env:
   REGISTRY: ghcr.io
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
-      # Checkout latest or specific tag
+      # Checkout latest or specific tag (fetch all tags for versioning)
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.version }}
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.version != '' && github.event.inputs.version != 'latest' && github.event.inputs.version || github.ref }}
 
       - name: Setup buildx
         uses: docker/setup-buildx-action@v3
@@ -36,20 +45,93 @@ jobs:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # On scheduled runs: scan the current published image for fixable vulnerabilities
+      - name: Scan current image for fixable vulnerabilities
+        if: github.event_name == 'schedule'
+        id: trivy_scan
+        uses: aquasecurity/trivy-action@v0.28.0
+        continue-on-error: true
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ github.repository }}:latest
+          format: "json"
+          output: "trivy-results.json"
+          ignore-unfixed: true
+          severity: "CRITICAL,HIGH"
+
+      # Evaluate whether a rebuild and new release is necessary
+      - name: Evaluate security status and version
+        id: security_check
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+            echo "is_scheduled_release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "Evaluating scheduled monthly security scan..."
+          if [ ! -f trivy-results.json ]; then
+            echo "Trivy results not found (image may not exist yet). Skipping scheduled release."
+            echo "should_build=false" >> "$GITHUB_OUTPUT"
+            echo "is_scheduled_release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          VULN_COUNT=$(jq '[.Results[]?.Vulnerabilities[]? | select(.Severity == "CRITICAL" or .Severity == "HIGH")] | length' trivy-results.json 2>/dev/null || echo "0")
+          echo "Found $VULN_COUNT fixable critical/high vulnerabilities in current latest image."
+
+          if [ "$VULN_COUNT" -gt 0 ]; then
+            echo "Security updates required ($VULN_COUNT fixable vulnerabilities found)."
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+            echo "is_scheduled_release=true" >> "$GITHUB_OUTPUT"
+
+            # Compute next patch version from existing semver tags
+            LATEST_TAG=$(git tag -l "v*.*.*" | sort -V | tail -n 1)
+            if [ -z "$LATEST_TAG" ]; then
+              LATEST_TAG="v1.0.0"
+            fi
+            VERSION_NUM="${LATEST_TAG#v}"
+            MAJOR=$(echo "$VERSION_NUM" | cut -d. -f1)
+            MINOR=$(echo "$VERSION_NUM" | cut -d. -f2)
+            PATCH=$(echo "$VERSION_NUM" | cut -d. -f3)
+            NEW_PATCH=$((PATCH + 1))
+            NEW_TAG="v${MAJOR}.${MINOR}.${NEW_PATCH}"
+            echo "Computed new tag: $NEW_TAG (previous: $LATEST_TAG)"
+            echo "new_tag=$NEW_TAG" >> "$GITHUB_OUTPUT"
+
+            CVE_LIST=$(jq -r '.Results[]?.Vulnerabilities[]? | "- \(.VulnerabilityID) (\(.Severity)): \(.PkgName) \(.InstalledVersion) -> \(.FixedVersion)"' trivy-results.json 2>/dev/null | sort -u | head -n 20)
+            if [ -z "$CVE_LIST" ]; then
+              CVE_LIST="General Alpine / nginx security updates."
+            fi
+            echo "cves<<EOF" >> "$GITHUB_OUTPUT"
+            echo "$CVE_LIST" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+          else
+            echo "No fixable critical or high vulnerabilities found. Skipping rebuild and release."
+            echo "should_build=false" >> "$GITHUB_OUTPUT"
+            echo "is_scheduled_release=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Extract metadata (tags, labels) for Docker
+        if: steps.security_check.outputs.should_build == 'true'
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ github.repository }}
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') || steps.security_check.outputs.is_scheduled_release == 'true' }}
+            type=raw,value=${{ steps.security_check.outputs.new_tag }},enable=${{ steps.security_check.outputs.is_scheduled_release == 'true' }}
 
-      # Build and push new docker image, skip for manual redeploy other than 'latest'
+      # Build and push new docker image only when necessary or on code push
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
-        if: ${{ github.event.inputs.version == '' || github.event.inputs.version == 'latest' }}
+        if: steps.security_check.outputs.should_build == 'true' && (github.event.inputs.version == '' || github.event.inputs.version == 'latest')
         with:
           file: Dockerfile
           context: .
@@ -59,16 +141,26 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  create-release:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v') && success()
-    permissions:
-      contents: write
-      packages: write
-
-    steps:
-      - name: Create GitHub Release
+      # Create release if triggered by a manual git tag push
+      - name: Create GitHub Release (manual tag)
         uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/v') && success()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Create git tag and GitHub release if triggered by scheduled security patch
+      - name: Create GitHub Release (automated security update)
+        uses: softprops/action-gh-release@v2
+        if: steps.security_check.outputs.is_scheduled_release == 'true' && success()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ steps.security_check.outputs.new_tag }}
+          name: ${{ steps.security_check.outputs.new_tag }} - Security Update
+          body: |
+            ## Automated Base Image Security Update
+            This release was automatically published because fixable high or critical vulnerabilities were detected in the container image.
+
+            ### Addressed Vulnerabilities:
+            ${{ steps.security_check.outputs.cves }}
+
+            Base image `nginx:alpine` and Alpine system packages were refreshed.
