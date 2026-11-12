@@ -130,7 +130,7 @@ jobs:
 
       # Build and push new docker image only when necessary or on code push
       - name: Build and push Docker images
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v7
         if: steps.security_check.outputs.should_build == 'true' && (github.event.inputs.version == '' || github.event.inputs.version == 'latest')
         with:
           file: Dockerfile
