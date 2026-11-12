@@ -143,14 +143,14 @@ jobs:
 
       # Create release if triggered by a manual git tag push
       - name: Create GitHub Release (manual tag)
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         if: startsWith(github.ref, 'refs/tags/v') && success()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       # Create git tag and GitHub release if triggered by scheduled security patch
       - name: Create GitHub Release (automated security update)
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         if: steps.security_check.outputs.is_scheduled_release == 'true' && success()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
